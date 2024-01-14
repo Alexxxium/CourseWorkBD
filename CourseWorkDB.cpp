@@ -126,11 +126,16 @@ QString CourseWorkDB::query2() {
     if(!connectSt()) {
         return "Can`t connect to data base!";
     }
+    constexpr auto name = "'Экстрактор-гомогенизатор для растительных образцов'";
+    constexpr auto standard1 = "'ГОСТ'";
+    constexpr auto standard2 = "'ТУ'";
 
-    CString query =
+    QString querydata =
         "SELECT Ext FROM "
-        "Ext{ils_consumption(.name LIKE 'Смазка' AND .standard LIKE 'ГОСТ')} "
+        "Ext{ils_consumption(.name LIKE %1 AND (.standard LIKE %2 OR .standard LIKE %3))} "
         "END_SELECT";
+
+    CString query = QS2CS(querydata.arg(name, standard1, standard2));
 
     aplExtent consumptions;
     if(m_db->m_api.m_data.NET_QueryEditParse(query)) {
@@ -157,11 +162,13 @@ QString CourseWorkDB::query3() {
     if(!connectSt()) {
         return "Can`t connect to data base!";
     }
-
     CString query =
         "SELECT Ext FROM "
-        "Ext{ils_consumption(.standard = 'ГОСТ 9754-76' OR .standard = 'ГОСТ 9569-79')} "
+        "Ext1{organization(.name = 'МБ1' OR .name = 'ФРТЦ1')} "
+        "Ext2{apl_lss3_comp_org_rel.organization IN #Ext1} "
+        "Ext{ils_consumption.supplier IN #Ext2} "
         "END_SELECT";
+
     aplExtent consumptions;
     if(m_db->m_api.m_data.NET_QueryEditParse(query)) {
         if(!m_db->m_api.m_data.NET_QueryExecute(consumptions)) {
@@ -177,8 +184,8 @@ QString CourseWorkDB::query3() {
     QString outstr;
     QTextStream out(&outstr);
     for(auto inst: consumptions) {
-        m_db->m_api.m_data.GetAttr(inst, m_db->m_consumptionMgr->a_ils_consumption_name, buff1);
-        m_db->m_api.m_data.GetAttr(inst, m_db->m_consumptionMgr->a_ils_consumption_description, buff2);
+        m_db->m_api.m_data.GetAttr(inst, m_db->m_consumptionMgr->a_ils_consumption_id, buff1);
+        m_db->m_api.m_data.GetAttr(inst, m_db->m_consumptionMgr->a_ils_consumption_name, buff2);
         out << CS2QS(buff1) << ": " << CS2QS(buff2) << '\n';
     }
     return outstr;

@@ -309,13 +309,13 @@ IlsPage {
             MenuItem {
                 text: branchTr("Запрос 2")
                 iconSource: "icons/toMsi.png"
-                toolTipText: branchTr("Найти все смазки, сделанные по ГОСТ стандарту")
+                toolTipText: branchTr("Поиск всех экстракторов-гомогенизаторов для растительных образцов, сделанных по стандарту ГОСТ")
                 onClicked: errPopup.showInfo(backend.query2())
             }
             MenuItem {
                 text: branchTr("Запрос 3")
                 iconSource: "icons/toMsi.png"
-                toolTipText: branchTr("Найти изделия, сделанные по стандартам 'ГОСТ 9754-76' и 'ГОСТ 9569-79'")
+                toolTipText: branchTr("Найти гомогенизаторы, поставляемые заводами 'МБ1' или 'ФРТЦ1'")
                 onClicked: errPopup.showInfo(backend.query3())
             }
         }

@@ -14,7 +14,7 @@ int main(int argc, char *argv[])
     CourseWorkDB backend;
     constexpr auto
         appicon = ":/app.ico",
-        appname = "Курсовая работа 'Проектирование базы данных на платформе PSS'";
+        appname = "Курсовая работа 'Разработка базы данных гомогенизаторы'";
 
     QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
     QApplication app(argc, argv);
